@@ -14,6 +14,6 @@ object Entities {
 
   final case class Password(value: String) extends AnyVal
 
-  final case class DateOfBirth(value:  Date) extends AnyVal
+  final case class DateOfBirth(value: Date) extends AnyVal
 
 }
