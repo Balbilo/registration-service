@@ -1,19 +1,23 @@
 package balbilo.registration.model
 
-import java.util.Date
+import java.time.{LocalDate, OffsetDateTime}
 
 object Entities {
 
-  final case class FirstName(value: String) extends AnyVal
+  final case class FullName private(value: String) extends AnyVal
 
-  final case class LastName(value: String) extends AnyVal
+  object FullName {
+    def apply(value: String): FullName = new FullName(value.trim)
+  }
 
-  final case class Email(value: String) extends AnyVal
+  final case class Email private(value: String) extends AnyVal
 
-  final case class Username(value: String) extends AnyVal
+  object Email {
+    def apply(value: String): Email = new Email(value.trim.toLowerCase())
+  }
 
   final case class Password(value: String) extends AnyVal
 
-  final case class DateOfBirth(value: Date) extends AnyVal
+  final case class DateOfBirth(value: LocalDate) extends AnyVal
 
 }
