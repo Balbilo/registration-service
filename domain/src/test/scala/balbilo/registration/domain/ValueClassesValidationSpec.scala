@@ -2,14 +2,14 @@ package balbilo.registration.domain
 
 import java.time.LocalDate
 
-import balbilo.registration.model.Entities.{DateOfBirth, Email, FullName, Password}
+import balbilo.registration.model.ValueClasses.{DateOfBirth, Email, FullName, Password}
 import balbilo.registration.model.RegistrationError
 import cats.data.NonEmptyList
 import cats.data.Validated.{Invalid, Valid}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-class EntitiesValidationSpec extends AnyWordSpec with Matchers {
+class ValueClassesValidationSpec extends AnyWordSpec with Matchers {
 
   "ValidationService" when {
 

@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+
+  mongodb:
+    build: mongo:4.2
+    restart: always
+    port:
+      - 
+    environment:

@@ -2,7 +2,7 @@ package balbilo.registration.domain
 
 import java.time.LocalDate
 
-import balbilo.registration.model.Entities._
+import balbilo.registration.model.ValueClasses._
 import balbilo.registration.model.RegistrationError
 import cats.data._
 import cats.implicits._

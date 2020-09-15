@@ -1,6 +1,6 @@
 package balbilo.registration.model
 
-import balbilo.registration.model.Entities._
+import balbilo.registration.model.ValueClasses._
 
 final case class UserDetails(
     fullName: FullName,

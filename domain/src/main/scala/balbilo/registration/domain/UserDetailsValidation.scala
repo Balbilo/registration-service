@@ -8,10 +8,11 @@ import cats.implicits.catsSyntaxTuple4Semigroupal
 final class UserDetailsValidation(userDetailsConfig: UserDetailsConfig) {
 
   def validateUserDetails(userDetails: UserDetails): ValidatedNel[RegistrationError, UserDetails] = {
-    (EntitiesValidation.validateFullName(userDetails.fullName),
+    (
+      EntitiesValidation.validateFullName(userDetails.fullName),
       EntitiesValidation.validateEmail(userDetails.email),
-    EntitiesValidation.validatePassword(userDetails.password),
-    EntitiesValidation.validateDateOfBirth(userDetails.dateOfBirth,userDetailsConfig.maxYears)).mapN(UserDetails)
+      EntitiesValidation.validatePassword(userDetails.password),
+      EntitiesValidation.validateDateOfBirth(userDetails.dateOfBirth, userDetailsConfig.maxYears)).mapN(UserDetails)
   }
 
 }

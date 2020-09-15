@@ -1,6 +1,6 @@
 package balbilo.registration.model
 
-import balbilo.registration.model.Entities._
+import balbilo.registration.model.ValueClasses._
 
 trait RegistrationError {
   def message: String
