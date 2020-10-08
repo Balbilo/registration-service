@@ -19,20 +19,12 @@ lazy val domain = Projects.module("domain")
   .dependsOn(model)
   .settings(Dependencies.domain)
 
-lazy val database = Projects.module("database")
-  .dependsOn(domain)
-  .settings(Dependencies.database)
-
 lazy val http = Projects.module("http")
   .dependsOn(domain)
   .settings(Dependencies.http)
 
-lazy val application = Projects.module("application")
-  .dependsOn(http)
-
 lazy val projects: Seq[ProjectReference] = Seq(
   model,
   domain,
-  http,
-  application
+  http
 )
