@@ -34,9 +34,9 @@ private[domain] object EntitiesValidation {
     val minDate = LocalDate.now
     val maxDate = minDate.minusYears(maxYears)
     dateOfBirth.value match {
-      case date if (date.isAfter(minDate) || date.isBefore(maxDate)) =>
+      case date if date.isAfter(minDate) || date.isBefore(maxDate) =>
         RegistrationError.InvalidDateOfBirth(dateOfBirth).invalidNel
-      case _                                                         => dateOfBirth.validNel
+      case _                                                       => dateOfBirth.validNel
     }
   }
 

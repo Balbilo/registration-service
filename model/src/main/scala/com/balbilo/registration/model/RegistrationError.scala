@@ -2,7 +2,7 @@ package com.balbilo.registration.model
 
 import ValueClasses._
 
-trait RegistrationError {
+trait RegistrationError extends ModelError {
   def message: String
 }
 

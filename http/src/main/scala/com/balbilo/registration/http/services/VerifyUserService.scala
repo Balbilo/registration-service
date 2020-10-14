@@ -1,4 +1,4 @@
-package com.balbilo.registration.http
+package com.balbilo.registration.http.services
 
 import com.balbilo.registration.model.UserDetails
 

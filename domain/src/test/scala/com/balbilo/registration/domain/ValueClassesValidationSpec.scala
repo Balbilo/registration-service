@@ -5,6 +5,7 @@ import java.time.LocalDate
 import cats.data.NonEmptyList
 import cats.data.Validated.{Invalid, Valid}
 import com.balbilo.registration.model.RegistrationError
+import com.balbilo.registration.model.ValueClasses._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -31,12 +32,16 @@ class ValueClassesValidationSpec extends AnyWordSpec with Matchers {
 
       "return invalid fullName empty string" in {
         val invalidFullName = FullName("")
-        EntitiesValidation.validateFullName(invalidFullName) shouldBe invalid(RegistrationError.InvalidFullName(invalidFullName))
+        EntitiesValidation.validateFullName(invalidFullName) shouldBe invalid(
+          RegistrationError.InvalidFullName(invalidFullName)
+        )
       }
 
       "return invalid fullName with not allowed characters" in {
         val invalidFullName = FullName("@#")
-        EntitiesValidation.validateFullName(invalidFullName) shouldBe invalid(RegistrationError.InvalidFullName(invalidFullName))
+        EntitiesValidation.validateFullName(invalidFullName) shouldBe invalid(
+          RegistrationError.InvalidFullName(invalidFullName)
+        )
       }
 
     }
@@ -93,7 +98,9 @@ class ValueClassesValidationSpec extends AnyWordSpec with Matchers {
 
       "return invalid Password empty string" in {
         val invalidPassword = Password("")
-        EntitiesValidation.validatePassword(invalidPassword) shouldBe invalid(RegistrationError.InvalidPassword(invalidPassword))
+        EntitiesValidation.validatePassword(invalidPassword) shouldBe invalid(
+          RegistrationError.InvalidPassword(invalidPassword)
+        )
       }
 
     }
@@ -101,23 +108,25 @@ class ValueClassesValidationSpec extends AnyWordSpec with Matchers {
     "validating DateOfBirth" should {
 
       "return valid date of birth" in {
-        val maxYears = 100
+        val maxYears         = 100
         val validDataOfBirth = DateOfBirth(LocalDate.of(1996, 11, 2))
         EntitiesValidation.validateDateOfBirth(validDataOfBirth, maxYears) shouldBe Valid(validDataOfBirth)
       }
 
       "return invalid date of birth when is before max" in {
-        val maxYears = 100
+        val maxYears           = 100
         val invalidDataOfBirth = DateOfBirth(LocalDate.now.minusYears(maxYears).minusDays(1))
         EntitiesValidation.validateDateOfBirth(invalidDataOfBirth, maxYears) shouldBe invalid(
-          RegistrationError.InvalidDateOfBirth(invalidDataOfBirth))
+          RegistrationError.InvalidDateOfBirth(invalidDataOfBirth)
+        )
       }
 
       "return invalid date of birth when is after min" in {
-        val maxYears = 100
+        val maxYears           = 100
         val invalidDataOfBirth = DateOfBirth(LocalDate.now.plusDays(1))
         EntitiesValidation.validateDateOfBirth(invalidDataOfBirth, maxYears) shouldBe invalid(
-          RegistrationError.InvalidDateOfBirth(invalidDataOfBirth))
+          RegistrationError.InvalidDateOfBirth(invalidDataOfBirth)
+        )
       }
     }
   }
