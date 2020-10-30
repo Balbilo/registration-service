@@ -41,5 +41,6 @@ lazy val http = Projects
 lazy val projects: Seq[ProjectReference] = Seq(
   model,
   domain,
+  json,
   http
 )

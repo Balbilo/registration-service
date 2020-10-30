@@ -1,3 +1,3 @@
 package com.balbilo.registration
 
-package object json extends RegistrationError {}
+package object json extends UserDetailsJson with RegistrationErrorJson with ServerErrorJson

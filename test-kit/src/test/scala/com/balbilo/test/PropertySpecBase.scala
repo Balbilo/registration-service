@@ -2,7 +2,9 @@ package com.balbilo.test
 
 import java.time.LocalDate
 
-import com.balbilo.registration.model.UserDetails
+import com.balbilo.registration.model.RegistrationError._
+import com.balbilo.registration.model.ServerError.{InternalServerError, MethodNotAllowedError}
+import com.balbilo.registration.model.{RegistrationError, ServerError, UserDetails}
 import com.balbilo.registration.model.ValueClasses.{DateOfBirth, Email, FullName, Password}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalactic.anyvals.PosInt
@@ -10,7 +12,7 @@ import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 trait PropertySpecBase extends ScalaCheckDrivenPropertyChecks {
 
-  val minSuccessful: PosInt = PosInt(100)
+  val minSuccessful: PosInt = PosInt(10)
 
   implicit override val generatorDrivenConfig = PropertyCheckConfiguration(minSuccessful = minSuccessful)
 
@@ -20,13 +22,38 @@ trait PropertySpecBase extends ScalaCheckDrivenPropertyChecks {
 
   implicit lazy val arbPassword = Arbitrary(Gen.alphaNumStr.map(Password))
 
-  implicit lazy val arbDateOfBirth = Arbitrary{
-    for{
-    num <- Gen.chooseNum(Long.MinValue,Long.MaxValue)
+  implicit lazy val arbDateOfBirth = Arbitrary(
+    Gen.chooseNum(LocalDate.MIN.toEpochDay, LocalDate.MAX.toEpochDay).map(day => DateOfBirth(LocalDate.ofEpochDay(day)))
+  )
 
-    } yield DateOfBirth(LocalDate.ofEpochDay(num))
+  implicit lazy val arbUserDetails = Arbitrary(Gen.resultOf(UserDetails))
+
+  implicit lazy val arbInvalidFullName    = Arbitrary(Gen.resultOf(InvalidFullName))
+  implicit lazy val arbInvalidEmail       = Arbitrary(Gen.resultOf(InvalidEmail))
+  implicit lazy val arbInvalidPassword    = Arbitrary(Gen.resultOf(InvalidPassword))
+  implicit lazy val arbInvalidDateOfBirth = Arbitrary(Gen.resultOf(InvalidDateOfBirth))
+
+  implicit lazy val arbRegistrationError: Arbitrary[RegistrationError] = Arbitrary {
+    for {
+      invalidFullName    <- arbInvalidFullName.arbitrary
+      invalidEmail       <- arbInvalidEmail.arbitrary
+      arbInvalidPassword <- arbInvalidPassword.arbitrary
+      invalidDateOfBirth <- arbInvalidDateOfBirth.arbitrary
+      registrationError  <- Gen.oneOf(invalidFullName, invalidEmail, arbInvalidPassword, invalidDateOfBirth)
+    } yield registrationError
   }
 
-  implicit lazy val arbUserDetails = Arbitrary{Gen.resultOf(UserDetails)}
+  implicit lazy val arbMethodNotAllowed: Arbitrary[MethodNotAllowedError] = Arbitrary {
+    for {
+      method         <- Gen.alphaNumStr
+      allowedMethods <- Gen.listOf(Gen.alphaNumStr)
+    } yield MethodNotAllowedError(method, allowedMethods)
+  }
 
+  implicit lazy val arbServerError: Arbitrary[ServerError] = Arbitrary {
+    for {
+      methodNotAllowed <- arbMethodNotAllowed.arbitrary
+      serverError      <- Gen.oneOf(methodNotAllowed, InternalServerError)
+    } yield serverError
+  }
 }

@@ -18,7 +18,8 @@ object Dependencies {
     object Circe {
       val core    = "io.circe" %% "circe-core"    % Versions.circe
       val generic = "io.circe" %% "circe-generic" % Versions.circe
-      val all     = Seq(core, generic)
+      val parser  = "io.circe" %% "circe-parser"  % Versions.circe
+      val all     = Seq(core, generic, parser)
     }
 
     object Cats {

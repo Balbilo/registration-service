@@ -5,7 +5,7 @@ import io.circe.Decoder.{decodeLocalDate, decodeString}
 import io.circe.Encoder.{encodeLocalDate, encodeString}
 import io.circe.{Decoder, Encoder}
 
-trait ValueClasses {
+trait ValueClassesJson {
 
   implicit val fullNameEncoder: Encoder[FullName] = encodeString.contramap(_.value)
   implicit val fullNameDecoder: Decoder[FullName] = decodeString.map(FullName.apply)
