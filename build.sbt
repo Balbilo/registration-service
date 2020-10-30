@@ -34,6 +34,7 @@ lazy val domain = Projects
 
 lazy val http = Projects
   .module("http")
+  .dependsOn(json)
   .dependsOn(domain)
   .dependsOn(testKit % "test -> test")
   .settings(Dependencies.http)

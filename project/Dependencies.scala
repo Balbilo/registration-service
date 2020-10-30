@@ -4,12 +4,12 @@ import sbt._
 object Dependencies {
 
   private object Versions {
-    val catsCore       = "2.1.1"
-    val scalaTest      = "3.2.0"
+    val catsCore       = "2.2.0"
+    val scalaTest      = "3.2.2"
     val scalaCheck     = "1.14.3"
     val scalaPlusCheck = "3.1.0.0-RC2"
     val circe          = "0.13.0"
-    val akkaHttp       = "10.2.0"
+    val akkaHttp       = "10.2.1"
     val akka           = "2.6.10"
   }
 

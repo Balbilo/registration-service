@@ -3,7 +3,8 @@ package com.balbilo.registration.http
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives.{complete, extractUri}
 import akka.http.scaladsl.server.{ExceptionHandler, MethodRejection, RejectionHandler}
-import com.balbilo.registration.model.MethodNotAllowedError
+import com.balbilo.registration.model.ServerError.MethodNotAllowedError
+import com.balbilo.registration.json
 
 object ServerHandler {
 

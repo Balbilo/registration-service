@@ -1,7 +1,7 @@
 package com.balbilo.registration.json
 
 import com.balbilo.registration.model.RegistrationError
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.{Encoder, Json}
 
 trait RegistrationErrorJson {
 
