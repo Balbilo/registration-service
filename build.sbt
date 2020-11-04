@@ -15,6 +15,10 @@ lazy val root = Project("registration-service", file("."))
 
 lazy val model = Projects.module("model")
 
+lazy val config = Projects.module("config")
+
+lazy val logging = Projects.module("logging")
+
 lazy val testKit = Projects
   .module("test-kit")
   .dependsOn(model)
@@ -28,6 +32,7 @@ lazy val json = Projects
 
 lazy val domain = Projects
   .module("domain")
+  .dependsOn(config)
   .dependsOn(model)
   .dependsOn(testKit % "test -> test")
   .settings(Dependencies.domain)

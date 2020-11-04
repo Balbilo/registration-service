@@ -27,10 +27,10 @@ object Dependencies {
       val all  = Seq(core)
     }
 
-    object Test {
-      val scalaTest      = "org.scalatest"     %% "scalatest"                % Versions.scalaTest
-      val scalaCheck     = "org.scalacheck"    %% "scalacheck"               % Versions.scalaCheck
-      val scalaPlusCheck = "org.scalatestplus" %% "scalatestplus-scalacheck" % Versions.scalaPlusCheck
+    object ScalaTest {
+      val scalaTest      = "org.scalatest"     %% "scalatest"                % Versions.scalaTest      % Test
+      val scalaCheck     = "org.scalacheck"    %% "scalacheck"               % Versions.scalaCheck     % Test
+      val scalaPlusCheck = "org.scalatestplus" %% "scalatestplus-scalacheck" % Versions.scalaPlusCheck % Test
       val all            = Seq(scalaTest, scalaCheck, scalaPlusCheck)
     }
 
@@ -39,11 +39,10 @@ object Dependencies {
       val actor       = "com.typesafe.akka" %% "akka-actor"          % Versions.akka
       val sl4j        = "com.typesafe.akka" %% "akka-slf4j"          % Versions.akka
       val stream      = "com.typesafe.akka" %% "akka-stream"         % Versions.akka
-      val httpTestKit = "com.typesafe.akka" %% "akka-http-testkit"   % Versions.akkaHttp
-      val streamTest  = "com.typesafe.akka" %% "akka-stream-testkit" % Versions.akka
-      val testKit     = "com.typesafe.akka" %% "akka-testkit"        % Versions.akka
-      val main        = Seq(http, actor, sl4j, stream)
-      val test        = Seq(httpTestKit, testKit, streamTest)
+      val httpTestKit = "com.typesafe.akka" %% "akka-http-testkit"   % Versions.akkaHttp % Test
+      val streamTest  = "com.typesafe.akka" %% "akka-stream-testkit" % Versions.akka     % Test
+      val testKit     = "com.typesafe.akka" %% "akka-testkit"        % Versions.akka     % Test
+      val all         = Seq(http, actor, sl4j, stream, httpTestKit, testKit, streamTest)
     }
   }
 
@@ -51,9 +50,8 @@ object Dependencies {
 
   lazy val domain = libraryDependencies ++= Libraries.Cats.all
 
-  lazy val testKit = libraryDependencies ++= Libraries.Test.all.map(_ % Test)
+  lazy val testKit = libraryDependencies ++= Libraries.ScalaTest.all
 
-  lazy val http = libraryDependencies ++= Libraries.Cats.all ++
-    Libraries.Akka.main ++ Libraries.Akka.test.map(_ % Test)
+  lazy val http = libraryDependencies ++= Libraries.Cats.all ++ Libraries.Akka.all
 
 }
