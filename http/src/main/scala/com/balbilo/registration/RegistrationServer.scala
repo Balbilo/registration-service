@@ -9,7 +9,7 @@ final case class RegistrationServer(
     httpConfig: HttpConfig
 ) {
 
-  def createServer[AC : ActorSystem]() =
+  def createServer()(implicit system: ActorSystem) =
     Http().newServerAt(httpConfig.serverConfig.interface, httpConfig.serverConfig.port).bind(routes)
 
   def routes: Route = ???

@@ -1,5 +1,6 @@
 package com.balbilo.registration.json
 
+import com.balbilo.registration.model.ValidationError
 import com.balbilo.registration.testkit.{AnyWordSpecBase, PropertySpecBase}
 import io.circe.parser._
 import io.circe.syntax._
@@ -10,16 +11,16 @@ class ValidationErrorJsonSpec extends AnyWordSpecBase with PropertySpecBase with
   "RegistrationJson" should {
 
     "encode and decode Registration error with code and message" in {
-      forAll { registrationError: RegistrationError =>
+      forAll { registrationError: ValidationError =>
         val json = s"""{"code":"${registrationError.code}","message":"${registrationError.message}"}"""
-        decoder[RegistrationError](json) shouldBe Right(registrationError)
+        decoder[ValidationError](json) shouldBe Right(registrationError)
         encoder(registrationError).noSpaces shouldBe json.trim
       }
     }
 
     "perform a roundTrip" in {
-      forAll { registrationError: RegistrationError =>
-        decoder[RegistrationError](encoder(registrationError).noSpaces) shouldBe Right(registrationError)
+      forAll { registrationError: ValidationError =>
+        decoder[ValidationError](encoder(registrationError).noSpaces) shouldBe Right(registrationError)
       }
     }
 

@@ -1,5 +1,6 @@
 package com.balbilo.registration.json
 
+import com.balbilo.registration.model.ServerError
 import com.balbilo.registration.testkit.{AnyWordSpecBase, PropertySpecBase}
 import io.circe.parser.decode
 import io.circe.syntax._

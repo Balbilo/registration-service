@@ -1,7 +1,6 @@
-package com.balbilo.registration
+package com.balbilo.registration.model
 
 import cats.data.NonEmptyList
-import com.balbilo.registration.domain.ValidationError
 
 sealed trait ServerError {
   def code: String

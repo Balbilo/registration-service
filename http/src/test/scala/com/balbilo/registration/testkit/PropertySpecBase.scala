@@ -2,9 +2,13 @@ package com.balbilo.registration.testkit
 
 import java.time.LocalDate
 
+import com.balbilo.registration.model.ServerError._
+import com.balbilo.registration.model.{ServerError, UserDetails, ValidationError}
+import com.balbilo.registration.model.ValueClasses._
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalactic.anyvals.PosInt
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
+import com.balbilo.registration.model.ValidationError._
 
 trait PropertySpecBase extends ScalaCheckDrivenPropertyChecks {
 
@@ -29,7 +33,7 @@ trait PropertySpecBase extends ScalaCheckDrivenPropertyChecks {
   implicit lazy val arbInvalidPassword    = Arbitrary(Gen.resultOf(InvalidPassword))
   implicit lazy val arbInvalidDateOfBirth = Arbitrary(Gen.resultOf(InvalidDateOfBirth))
 
-  implicit lazy val arbRegistrationError: Arbitrary[RegistrationError] = Arbitrary {
+  implicit lazy val arbRegistrationError: Arbitrary[ValidationError] = Arbitrary {
     for {
       invalidFullName    <- arbInvalidFullName.arbitrary
       invalidEmail       <- arbInvalidEmail.arbitrary

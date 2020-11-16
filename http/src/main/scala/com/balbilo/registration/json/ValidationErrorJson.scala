@@ -1,6 +1,6 @@
 package com.balbilo.registration.json
 
-import com.balbilo.registration.domain.ValidationError
+import com.balbilo.registration.model.ValidationError
 import io.circe.{Encoder, Json}
 
 trait ValidationErrorJson {

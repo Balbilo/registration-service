@@ -4,6 +4,7 @@ import java.time.LocalDate
 
 import cats.data.ValidatedNel
 import cats.implicits.catsSyntaxValidatedId
+import com.balbilo.registration.model.ValidationError
 import com.balbilo.registration.model.ValueClasses._
 
 import scala.util.matching.Regex

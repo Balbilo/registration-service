@@ -4,6 +4,7 @@ import java.time.LocalDate
 
 import cats.data.NonEmptyList
 import cats.data.Validated.{Invalid, Valid}
+import com.balbilo.registration.model.ValidationError
 import com.balbilo.registration.model.ValueClasses._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

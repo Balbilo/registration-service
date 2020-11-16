@@ -40,13 +40,13 @@ object Dependencies {
     object Akka {
       val http        = "com.typesafe.akka" %% "akka-http"         % Versions.akkaHttp
       val httpCirce   = "de.heikoseeberger" %% "akka-http-circe"   % Versions.akkaHttpCirce
-      val httpTestKit = "com.typesafe.akka" %% "akka-http-testkit" % Versions.akkaHttp % Test
+      val stream      = "com.typesafe.akka" %% "akka-stream"       % Versions.akka
       val sl4j        = "com.typesafe.akka" %% "akka-slf4j"        % Versions.akka
-//      val actor       = "com.typesafe.akka" %% "akka-actor"          % Versions.akka
-//      val stream      = "com.typesafe.akka" %% "akka-stream"         % Versions.akka
+      val httpTestKit = "com.typesafe.akka" %% "akka-http-testkit" % Versions.akkaHttp % Test
+      //      val actor       = "com.typesafe.akka" %% "akka-actor"          % Versions.akka
 //      val streamTest  = "com.typesafe.akka" %% "akka-stream-testkit" % Versions.akka     % Test
 //      val testKit     = "com.typesafe.akka" %% "akka-testkit"        % Versions.akka     % Test
-      val all         = Seq(http, httpTestKit, httpCirce, sl4j)
+      val all         = Seq(http, httpCirce, stream, sl4j, httpTestKit)
     }
 
     object Logging {

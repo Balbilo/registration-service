@@ -1,6 +1,6 @@
 package com.balbilo.registration.json
 
-import com.balbilo.registration.ServerError
+import com.balbilo.registration.model.ServerError
 import io.circe.{Encoder, Json}
 
 trait ServerErrorJson {

@@ -1,4 +1,4 @@
-package com.balbilo.registration.domain
+package com.balbilo.registration.model
 
 import com.balbilo.registration.model.ValueClasses._
 
