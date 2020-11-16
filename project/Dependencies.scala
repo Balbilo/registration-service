@@ -4,13 +4,16 @@ import sbt._
 object Dependencies {
 
   private object Versions {
-    val catsCore       = "2.2.0"
-    val scalaTest      = "3.2.2"
-    val scalaCheck     = "1.14.3"
-    val scalaPlusCheck = "3.1.0.0-RC2"
-    val circe          = "0.13.0"
-    val akkaHttp       = "10.2.1"
-    val akka           = "2.6.10"
+    val catsCore        = "2.2.0"
+    val scalaTest       = "3.2.2"
+    val scalaCheck      = "1.14.3"
+    val scalaPlusCheck  = "3.1.0.0-RC2"
+    val circe           = "0.13.0"
+    val akkaHttp        = "10.2.1"
+    val akka            = "2.6.10"
+    val logBack         = "1.2.3"
+    val typeSafeLogging = "3.9.2"
+    val akkaHttpCirce   = "1.35.2"
   }
 
   private object Libraries {
@@ -35,23 +38,29 @@ object Dependencies {
     }
 
     object Akka {
-      val http        = "com.typesafe.akka" %% "akka-http"           % Versions.akkaHttp
-      val actor       = "com.typesafe.akka" %% "akka-actor"          % Versions.akka
-      val sl4j        = "com.typesafe.akka" %% "akka-slf4j"          % Versions.akka
-      val stream      = "com.typesafe.akka" %% "akka-stream"         % Versions.akka
-      val httpTestKit = "com.typesafe.akka" %% "akka-http-testkit"   % Versions.akkaHttp % Test
-      val streamTest  = "com.typesafe.akka" %% "akka-stream-testkit" % Versions.akka     % Test
-      val testKit     = "com.typesafe.akka" %% "akka-testkit"        % Versions.akka     % Test
-      val all         = Seq(http, actor, sl4j, stream, httpTestKit, testKit, streamTest)
+      val http        = "com.typesafe.akka" %% "akka-http"         % Versions.akkaHttp
+      val httpCirce   = "de.heikoseeberger" %% "akka-http-circe"   % Versions.akkaHttpCirce
+      val httpTestKit = "com.typesafe.akka" %% "akka-http-testkit" % Versions.akkaHttp % Test
+      val sl4j        = "com.typesafe.akka" %% "akka-slf4j"        % Versions.akka
+//      val actor       = "com.typesafe.akka" %% "akka-actor"          % Versions.akka
+//      val stream      = "com.typesafe.akka" %% "akka-stream"         % Versions.akka
+//      val streamTest  = "com.typesafe.akka" %% "akka-stream-testkit" % Versions.akka     % Test
+//      val testKit     = "com.typesafe.akka" %% "akka-testkit"        % Versions.akka     % Test
+      val all         = Seq(http, httpTestKit, httpCirce, sl4j)
+    }
+
+    object Logging {
+      val logBack         = "ch.qos.logback"              % "logback-classic" % Versions.logBack
+      val typeSafeLogging = "com.typesafe.scala-logging" %% "scala-logging"   % Versions.typeSafeLogging
+      val all             = Seq(logBack, typeSafeLogging)
     }
   }
 
-  lazy val json = libraryDependencies ++= Libraries.Circe.all
-
-  lazy val domain = libraryDependencies ++= Libraries.Cats.all
-
-  lazy val testKit = libraryDependencies ++= Libraries.ScalaTest.all
-
-  lazy val http = libraryDependencies ++= Libraries.Cats.all ++ Libraries.Akka.all
+  lazy val http =
+    libraryDependencies ++= Libraries.Cats.all ++
+      Libraries.Akka.all ++
+      Libraries.Circe.all ++
+      Libraries.Logging.all ++
+      Libraries.ScalaTest.all
 
 }
