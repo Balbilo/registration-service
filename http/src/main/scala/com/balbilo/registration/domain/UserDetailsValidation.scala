@@ -1,18 +1,21 @@
 package com.balbilo.registration.domain
 
-import cats.data.NonEmptyList
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import com.balbilo.registration.config.UserDetailsConfig
-import com.balbilo.registration.model.{UserDetails, ValidationError}
+import com.balbilo.registration.model.{ServerError, UserDetails}
 
-final class UserDetailsValidation(userDetailsConfig: UserDetailsConfig) {
+trait UserDetailsValidation {
+  def validateUserDetails(userDetails: UserDetails): Either[ServerError, UserDetails]
+}
 
-  def validateUserDetails(userDetails: UserDetails): Either[NonEmptyList[ValidationError], UserDetails] =
+final class UserDetailsValidationImpl(userDetailsConfig: UserDetailsConfig) extends UserDetailsValidation {
+
+  def validateUserDetails(userDetails: UserDetails): Either[ServerError, UserDetails] =
     (
       DetailsValidation.validateFullName(userDetails.fullName, userDetailsConfig.fullNameRegex.r),
       DetailsValidation.validateEmail(userDetails.email, userDetailsConfig.emailRegex.r),
       DetailsValidation.validatePassword(userDetails.password, userDetailsConfig.passwordRegex.r),
       DetailsValidation.validateDateOfBirth(userDetails.dateOfBirth, userDetailsConfig.maxYears)
-    ).mapN(UserDetails).toEither
+    ).mapN(UserDetails).leftMap(ServerError.InvalidDetailsError).toEither
 
 }

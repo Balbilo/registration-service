@@ -5,3 +5,5 @@ final case class HttpConfig(userDetailsConfig: UserDetailsConfig, serverConfig: 
 final case class UserDetailsConfig(fullNameRegex: String, emailRegex: String, passwordRegex: String, maxYears: Int)
 
 final case class ServerConfig(interface: String, port: Int)
+
+final case class DatabaseConfig()

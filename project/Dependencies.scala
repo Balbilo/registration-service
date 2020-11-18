@@ -14,9 +14,21 @@ object Dependencies {
     val logBack         = "1.2.3"
     val typeSafeLogging = "3.9.2"
     val akkaHttpCirce   = "1.35.2"
+    val mongoDriver     = "4.1.1"
+    val pureConfig      = "0.14.0"
   }
 
   private object Libraries {
+
+    object Config {
+      val pureConfig = "com.github.pureconfig" %% "pureconfig" % Versions.pureConfig
+      val all        = Seq(pureConfig)
+    }
+
+    object Mongo {
+      val mongoDriver = "org.mongodb.scala" %% "mongo-scala-driver" % Versions.mongoDriver
+      val all         = Seq(mongoDriver)
+    }
 
     object Circe {
       val core    = "io.circe" %% "circe-core"    % Versions.circe
@@ -43,7 +55,7 @@ object Dependencies {
       val stream      = "com.typesafe.akka" %% "akka-stream"       % Versions.akka
       val sl4j        = "com.typesafe.akka" %% "akka-slf4j"        % Versions.akka
       val httpTestKit = "com.typesafe.akka" %% "akka-http-testkit" % Versions.akkaHttp % Test
-      //      val actor       = "com.typesafe.akka" %% "akka-actor"          % Versions.akka
+//      val actor       = "com.typesafe.akka" %% "akka-actor"          % Versions.akka
 //      val streamTest  = "com.typesafe.akka" %% "akka-stream-testkit" % Versions.akka     % Test
 //      val testKit     = "com.typesafe.akka" %% "akka-testkit"        % Versions.akka     % Test
       val all         = Seq(http, httpCirce, stream, sl4j, httpTestKit)
@@ -61,6 +73,8 @@ object Dependencies {
       Libraries.Akka.all ++
       Libraries.Circe.all ++
       Libraries.Logging.all ++
-      Libraries.ScalaTest.all
+      Libraries.ScalaTest.all ++
+      Libraries.Mongo.all ++
+      Libraries.Config.all
 
 }
