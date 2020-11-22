@@ -1,6 +1,6 @@
 package com.balbilo.registration.json
 
-import com.balbilo.registration.model.UserDetails
+import com.balbilo.registration.model.ServerError
 import com.balbilo.registration.testkit.{AnyWordSpecBase, PropertySpecBase}
 import io.circe.parser.decode
 import io.circe.syntax._
@@ -8,21 +8,16 @@ import io.circe.{Decoder, Encoder}
 
 class ServerErrorJsonSpec extends AnyWordSpecBase with PropertySpecBase with FromJson {
 
-  "RegistrationJson" should {
+  "ServerErrorJson" should {
 
-    "encode and decode Server error with code and message" in {
-      forAll { userDetails: UserDetails =>
-        val json =
-          s"""{"fullName":"${userDetails.fullName.value}","email":"${userDetails.email.value}","password":"${userDetails.password.value}","dateOfBirth":"${userDetails.dateOfBirth.value}"}"""
-        decoder[UserDetails](json) shouldBe Right(userDetails)
-        encoder(userDetails).noSpaces shouldBe json.trim
-      }
+    "encode and decode Server error with code and message" in forAll { serverError: ServerError =>
+      val json = s"""{"code":"${serverError.code}","message":"${serverError.message}"}"""
+      decoder[ServerError](json) shouldBe Right(serverError)
+      encoder(serverError).noSpaces shouldBe json.trim
     }
 
-    "perform a roundTrip" in {
-      forAll { userDetails: UserDetails =>
-        decoder[UserDetails](encoder(userDetails).noSpaces) shouldBe Right(userDetails)
-      }
+    "perform a roundTrip" in forAll { serverError: ServerError =>
+      decoder[ServerError](encoder(serverError).noSpaces) shouldBe Right(serverError)
     }
 
   }

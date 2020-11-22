@@ -12,9 +12,9 @@ final class UserDetailsValidationImpl(userDetailsConfig: UserDetailsConfig) exte
 
   def validateUserDetails(userDetails: UserDetails): Either[ServerError, UserDetails] =
     (
-      DetailsValidation.validateFullName(userDetails.fullName, userDetailsConfig.fullNameRegex.r),
-      DetailsValidation.validateEmail(userDetails.email, userDetailsConfig.emailRegex.r),
-      DetailsValidation.validatePassword(userDetails.password, userDetailsConfig.passwordRegex.r),
+      DetailsValidation.validateFullName(userDetails.fullName, userDetailsConfig.fullNameRegex),
+      DetailsValidation.validateEmail(userDetails.email, userDetailsConfig.emailRegex),
+      DetailsValidation.validatePassword(userDetails.password, userDetailsConfig.passwordRegex),
       DetailsValidation.validateDateOfBirth(userDetails.dateOfBirth, userDetailsConfig.maxYears)
     ).mapN(UserDetails).leftMap(ServerError.InvalidDetailsError).toEither
 

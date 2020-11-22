@@ -2,31 +2,24 @@ package com.balbilo.registration.model
 
 import com.balbilo.registration.model.ValueClasses._
 
-sealed trait ValidationError {
-  def code: String
-  def message: String
-}
+sealed trait ValidationError
 
 object ValidationError {
 
   final case class InvalidFullName(fullName: FullName) extends ValidationError {
-    val code    = "invalidFullName"
-    val message = s"Invalid name: [${fullName.value}]"
+    override def toString = "invalidFullName"
   }
 
   final case class InvalidEmail(email: Email) extends ValidationError {
-    val code    = "invalidEmail"
-    val message = s"Invalid email: [${email.value}]"
+    override def toString = "invalidEmail"
   }
 
   final case class InvalidPassword(password: Password) extends ValidationError {
-    val code    = "invalidPassword"
-    val message = s"Invalid password: [${password.value}]"
+    override def toString = "invalidPassword"
   }
 
   final case class InvalidDateOfBirth(dateOfBirth: DateOfBirth) extends ValidationError {
-    val code    = "invalidDateOfBirth"
-    val message = s"Invalid date of birth: [${dateOfBirth.value}]"
+    override def toString = "invalidDateOfBirth"
   }
 
 }

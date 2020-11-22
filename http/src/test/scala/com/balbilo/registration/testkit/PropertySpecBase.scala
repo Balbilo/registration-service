@@ -3,7 +3,7 @@ package com.balbilo.registration.testkit
 import java.time.LocalDate
 
 import com.balbilo.registration.model.ServerError._
-import com.balbilo.registration.model.{ServerError, UserDetails, ValidationError}
+import com.balbilo.registration.model.{ServerError, UserDetails, UserToken, ValidationError}
 import com.balbilo.registration.model.ValueClasses._
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalactic.anyvals.PosInt
@@ -26,6 +26,8 @@ trait PropertySpecBase extends ScalaCheckDrivenPropertyChecks {
     Gen.chooseNum(LocalDate.MIN.toEpochDay, LocalDate.MAX.toEpochDay).map(day => DateOfBirth(LocalDate.ofEpochDay(day)))
   )
 
+  implicit lazy val arbToken = Arbitrary(Gen.alphaNumStr.map(Token))
+
   implicit lazy val arbUserDetails = Arbitrary(Gen.resultOf(UserDetails))
 
   implicit lazy val arbInvalidFullName    = Arbitrary(Gen.resultOf(InvalidFullName))
@@ -33,7 +35,7 @@ trait PropertySpecBase extends ScalaCheckDrivenPropertyChecks {
   implicit lazy val arbInvalidPassword    = Arbitrary(Gen.resultOf(InvalidPassword))
   implicit lazy val arbInvalidDateOfBirth = Arbitrary(Gen.resultOf(InvalidDateOfBirth))
 
-  implicit lazy val arbRegistrationError: Arbitrary[ValidationError] = Arbitrary {
+  implicit lazy val arbValidationError: Arbitrary[ValidationError] = Arbitrary {
     for {
       invalidFullName    <- arbInvalidFullName.arbitrary
       invalidEmail       <- arbInvalidEmail.arbitrary
@@ -56,4 +58,6 @@ trait PropertySpecBase extends ScalaCheckDrivenPropertyChecks {
       serverError      <- Gen.oneOf(methodNotAllowed, InternalServerError)
     } yield serverError
   }
+
+  implicit lazy val arbUserToken: Arbitrary[UserToken] = Arbitrary(Gen.resultOf(UserToken))
 }

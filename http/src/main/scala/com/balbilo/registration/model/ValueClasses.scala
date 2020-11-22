@@ -19,6 +19,6 @@ object ValueClasses {
 
   final case class DateOfBirth(value: LocalDate) extends AnyVal
 
-  final case class Token private (value: String) extends AnyVal
+  final case class Token(value: String) extends AnyVal
 
 }

@@ -11,7 +11,7 @@ object ServerError {
 
   final case class InvalidDetailsError(invalidFields: NonEmptyList[ValidationError]) extends ServerError {
     override def code: String    = "invalidDetails"
-    override def message: String = s"Invalid details: [${invalidFields.toList.mkString(", ")}]"
+    override def message: String = s"${invalidFields.toList.mkString(", ")}"
   }
 
   final case class MethodNotAllowedError(requestMethod: String, allowedMethods: List[String]) extends ServerError {

@@ -5,7 +5,7 @@ import io.circe.Decoder.{decodeLocalDate, decodeString}
 import io.circe.Encoder.{encodeLocalDate, encodeString}
 import io.circe.{Decoder, Encoder}
 
-trait ValueClassesJson {
+private[json] trait ValueClassesJson {
 
   implicit lazy val fullNameEncoder: Encoder[FullName] = encodeString.contramap(_.value)
   implicit lazy val fullNameDecoder: Decoder[FullName] = decodeString.map(FullName.apply)
@@ -18,5 +18,8 @@ trait ValueClassesJson {
 
   implicit lazy val dateOfBirthEncoder: Encoder[DateOfBirth] = encodeLocalDate.contramap(_.value)
   implicit lazy val dateOfBirthDecoder: Decoder[DateOfBirth] = decodeLocalDate.map(DateOfBirth.apply)
+
+  implicit lazy val tokenEncoder: Encoder[Token] = encodeString.contramap(_.value)
+  implicit lazy val tokenDecoder: Decoder[Token] = decodeString.map(Token)
 
 }
