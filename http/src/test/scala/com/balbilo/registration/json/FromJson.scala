@@ -1,7 +1,6 @@
 package com.balbilo.registration.json
 
-import com.balbilo.registration.model.ServerError
-import com.balbilo.registration.model.ServerError._
+import com.balbilo.registration.model.{HttpError, ServerError}
 import io.circe.Decoder
 import org.scalatest.Assertions.fail
 
@@ -18,8 +17,9 @@ trait FromJson {
     val msg             = betweenBrackets.findAllIn(message).toList.map(_.replaceAll("""\[|\]""", ""))
     (code, msg) match {
       case ("methodNotAllowed", method :: allowed :: Nil) =>
-        MethodNotAllowedError(method, if (allowed.nonEmpty) allowed.split(", ", -1).toList else Nil)
-      case ("internalServerError", Nil)                   => InternalServerError
+        HttpError.MethodNotAllowedError(method, if (allowed.nonEmpty) allowed.split(", ", -1).toList else Nil)
+      case ("internalServerError", Nil)                   => HttpError.InternalServerError
+      case ("notFound", path :: Nil)                      => HttpError.NotFound(path)
       case _                                              => fail(s"Failed to parse json server error: $code, $message, ${msg.size}")
     }
   }

@@ -6,13 +6,14 @@ import io.circe.parser.decode
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
-class UserDetailsJsonSpec extends AnyWordSpecBase with PropertySpecBase {
+class UserDetailsValidationJsonSpec extends AnyWordSpecBase with PropertySpecBase {
 
   "UserDetailsJson" should {
 
     "encode and decode UserDetails" in forAll { userDetails: UserDetails =>
       val json =
         s"""{"fullName":"${userDetails.fullName.value}","email":"${userDetails.email.value}","password":"${userDetails.password.value}","dateOfBirth":"${userDetails.dateOfBirth.value}"}"""
+        s"""{"fullName":"Andreas Rigas","email":"as@.as.com","password":"asdjasdjA12","dateOfBirth":"02/03/2020"}"""
       decoder[UserDetails](json) shouldBe Right(userDetails)
       encoder(userDetails).noSpaces shouldBe json.trim
     }

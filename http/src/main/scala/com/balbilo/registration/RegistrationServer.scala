@@ -3,14 +3,27 @@ package com.balbilo.registration
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
-import com.balbilo.registration.config.HttpConfig
+import akka.http.scaladsl.server.Directives.concat
+import com.balbilo.registration.config.ServerConfig
+import com.balbilo.registration.domain.Domain
+import com.balbilo.registration.routes.{Authenticate, Register}
+import com.typesafe.scalalogging.LazyLogging
 
-final case class RegistrationServer(
-    httpConfig: HttpConfig
-) {
+import scala.concurrent.Future
 
-  def createServer()(implicit system: ActorSystem) =
-    Http().newServerAt(httpConfig.serverConfig.interface, httpConfig.serverConfig.port).bind(routes)
+final class RegistrationServer(
+    config: ServerConfig,
+    services: Domain
+)(implicit system: ActorSystem) extends LazyLogging{
 
-  def routes: Route = ???
+  def createServer(): Future[Http.ServerBinding] = {
+    logger.info("Server started......")
+    Http().newServerAt(config.interface, config.port).bind(routes)
+  }
+
+  private def routes: Route = {
+    services.handlingService.handler{
+      concat(Authenticate(services.authentication, services.validation).route, Register(services.registration).route)
+    }
+  }
 }

@@ -2,13 +2,13 @@ package com.balbilo.registration.testkit
 
 import java.time.LocalDate
 
-import com.balbilo.registration.model.ServerError._
-import com.balbilo.registration.model.{ServerError, UserDetails, UserToken, ValidationError}
+import com.balbilo.registration.model.HttpError._
+import com.balbilo.registration.model.ValidationError._
 import com.balbilo.registration.model.ValueClasses._
+import com.balbilo.registration.model.{ServerError, UserDetails, UserToken, ValidationError}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalactic.anyvals.PosInt
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import com.balbilo.registration.model.ValidationError._
 
 trait PropertySpecBase extends ScalaCheckDrivenPropertyChecks {
 

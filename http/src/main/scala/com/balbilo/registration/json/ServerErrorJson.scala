@@ -5,7 +5,7 @@ import io.circe.{Encoder, Json}
 
 trait ServerErrorJson {
 
-  implicit lazy val serverErrorEncoder: Encoder[ServerError] = error =>
+  implicit def serverErrorEncoder[E <: ServerError]: Encoder[E] = error =>
     Json.obj(
       ("code", Json.fromString(error.code)),
       ("message", Json.fromString(error.message))
