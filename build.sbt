@@ -14,12 +14,13 @@ lazy val team = taskKey[Unit]("Team name")
 lazy val root = Project("registration-service", file("."))
   .aggregate(projects: _*)
   .settings(Aliases.commonAliases)
-  .settings(team := { print("team") })
+  .settings(team := print("team"))
 
 lazy val http = Projects
   .module("http")
   .enablePlugins(JavaAppPackaging, DockerPlugin)
   .settings(Dependencies.http)
+  .settings(DockerSettings.settings)
 
 lazy val projects: Seq[ProjectReference] = Seq(
   http

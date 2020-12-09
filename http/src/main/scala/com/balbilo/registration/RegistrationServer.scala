@@ -5,7 +5,7 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.Directives.concat
 import com.balbilo.registration.config.ServerConfig
-import com.balbilo.registration.domain.Domain
+import com.balbilo.registration.services.Domain
 import com.balbilo.registration.routes.{Authenticate, Register}
 import com.typesafe.scalalogging.LazyLogging
 
@@ -22,7 +22,7 @@ final class RegistrationServer(
   }
 
   private def routes: Route = {
-    services.handlingService.handler{
+    HttpHandler.exceptionsRejections{
       concat(Authenticate(services.authentication, services.validation).route, Register(services.registration).route)
     }
   }

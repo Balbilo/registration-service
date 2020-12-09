@@ -1,4 +1,4 @@
-package com.balbilo.registration.domain
+package com.balbilo.registration.services
 
 import java.time.LocalDate
 

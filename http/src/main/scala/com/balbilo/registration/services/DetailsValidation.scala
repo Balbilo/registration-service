@@ -1,4 +1,4 @@
-package com.balbilo.registration.domain
+package com.balbilo.registration.services
 
 import java.time.LocalDate
 
@@ -9,7 +9,7 @@ import com.balbilo.registration.model.ValueClasses._
 
 import scala.util.matching.Regex
 
-private[domain] object DetailsValidation {
+private[services] object DetailsValidation {
 
   def validateFullName(fullName: FullName, fullNameRegex: Regex): ValidatedNel[ValidationError.InvalidFullName, FullName] =
     fullName.value match {

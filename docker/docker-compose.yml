@@ -2,8 +2,11 @@ version: "3.8"
 services:
 
   mongodb:
-    build: mongo:4.2
+    image: mongo:4.2
     restart: always
-    port:
-      - 
+    ports:
+      - 27017:27017
     environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+

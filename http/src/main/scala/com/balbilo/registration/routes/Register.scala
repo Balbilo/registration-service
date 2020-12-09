@@ -4,8 +4,9 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives.{as, complete, entity, onComplete, path, post}
 import akka.http.scaladsl.server.Route
-import com.balbilo.registration.domain.RegisterService
-import com.balbilo.registration.json.{userTokenDecoder, userTokenEncoder}
+import com.balbilo.registration.services.RegisterService
+import com.balbilo.registration.json.{serverErrorEncoder, userTokenDecoder, userTokenEncoder}
+import com.balbilo.registration.model.RegisterError.UserRegistered
 import com.balbilo.registration.model.{RegisterError, UserToken}
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 
@@ -29,7 +30,12 @@ final case class Register(service: RegisterService)(implicit system: ActorSystem
 
   private def handleResponse(register: Either[RegisterError, UserToken]): Route =
     register match {
-      case Right(userToken) => complete(StatusCodes.OK, userToken)
-      case Left(userToken)  => ???
+      case Right(userToken) => complete(StatusCodes.OK -> userToken)
+      case Left(error)  => handlerError(error)
+    }
+
+  private def handlerError(error: RegisterError): Route =
+    error match {
+      case UserRegistered => complete(StatusCodes.AlreadyReported -> UserRegistered)
     }
 }

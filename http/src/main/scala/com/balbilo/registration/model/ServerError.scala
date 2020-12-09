@@ -15,7 +15,6 @@ object AuthenticationError {
     val code: String    = "invalidDetails"
     val message: String = s"[${invalidFields.toList.mkString(", ")}]"
   }
-
 }
 
 sealed trait HttpError extends ServerError
@@ -43,9 +42,8 @@ sealed trait RegisterError extends ServerError
 
 object RegisterError {
 
-  case object Registered extends RegisterError {
+  case object UserRegistered extends RegisterError {
     val code: String    = "Registered"
-    val message: String = "User already Registered"
+    val message: String = "Registered: user already signed up"
   }
-
 }

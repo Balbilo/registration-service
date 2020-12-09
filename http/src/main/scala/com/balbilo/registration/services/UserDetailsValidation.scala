@@ -1,4 +1,4 @@
-package com.balbilo.registration.domain
+package com.balbilo.registration.services
 
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import com.balbilo.registration.config.UserDetailsConfig
