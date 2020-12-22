@@ -1,6 +1,6 @@
 package com.balbilo.registration.model
 
-import java.time.LocalDate
+import java.time.{Instant, LocalDate}
 
 object ValueClasses {
 
@@ -20,5 +20,7 @@ object ValueClasses {
   final case class DateOfBirth(value: LocalDate) extends AnyVal
 
   final case class Token(value: String) extends AnyVal
+
+  final case class Expiration(value: Instant) extends AnyVal
 
 }

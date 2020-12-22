@@ -1,4 +1,4 @@
-package com.balbilo.registration.services
+package com.balbilo.registration.service
 
 import java.time.LocalDate
 
@@ -38,14 +38,18 @@ class UserDetailsValidationSpec extends AnyWordSpecBase with PropertySpecBase {
     }
 
     "return a NonEmptyList of invalid details" in {
-      val invalidEmail = Email("sdsd.com")
+      val invalidEmail    = Email("sdsd.com")
       val invalidPassword = Password("whatever123")
-      val userDetails = UserDetails(FullName("Great Developer"),invalidEmail,invalidPassword,DateOfBirth(LocalDate.now().minusDays(maxYears-1)))
-      val result = validation.validateUserDetails(userDetails)
+      val userDetails     = UserDetails(FullName("Great Developer"),
+                                    invalidEmail,
+                                    invalidPassword,
+                                    DateOfBirth(LocalDate.now().minusDays(maxYears - 1)))
+      val result          = validation.validateUserDetails(userDetails)
 
-      result shouldBe Left(AuthenticationError.InvalidDetailsError(
-        NonEmptyList(ValidationError.InvalidEmail(invalidEmail),List(ValidationError.InvalidPassword(invalidPassword)))
-      ))
+      result shouldBe Left(
+        AuthenticationError.InvalidDetailsError(
+          NonEmptyList(ValidationError.InvalidEmail(invalidEmail), List(ValidationError.InvalidPassword(invalidPassword)))
+        ))
     }
   }
 

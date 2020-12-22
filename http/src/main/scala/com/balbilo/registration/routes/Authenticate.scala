@@ -1,27 +1,34 @@
 package com.balbilo.registration.routes
 
+import akka.Done
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import cats.data.EitherT
-import com.balbilo.registration.services.{AuthenticateService, UserDetailsValidation}
+import com.balbilo.registration.client.{Authorization, Clients}
 import com.balbilo.registration.json._
 import com.balbilo.registration.model.{AuthenticationError, UserDetails, UserToken}
+import com.balbilo.registration.repository.AuthenticationRepository
+import com.balbilo.registration.service.UserDetailsValidation
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
-final case class Authenticate(service: AuthenticateService, validation: UserDetailsValidation)(implicit system: ActorSystem) {
+final case class Authenticate(service: UserDetailsValidation, repository: AuthenticationRepository, client: Clients)(implicit
+    system: ActorSystem
+) {
 
   private implicit val ec = system.dispatcher
 
   val route =
     (path("auth") & post & entity(as[UserDetails])) { userDetails =>
       val authenticate = (for {
-        valid     <- EitherT(Future.successful(validation.validateUserDetails(userDetails)))
-        userToken <- EitherT(service.authenticate(valid))
+        valid     <- EitherT(Future.successful(service.validateUserDetails(userDetails)))
+        userToken <- EitherT(client.authorization.authorizeUser(valid))
+        _         <- EitherT(client.authentication.authenticateUserEmail(userToken, valid.email))
+        userToken <- EitherT(repository.authenticateUser(valid))
       } yield userToken).value
 
       onComplete(authenticate) {
@@ -29,16 +36,16 @@ final case class Authenticate(service: AuthenticateService, validation: UserDeta
       }
     }
 
-  private def handleResponse(response: Try[Either[AuthenticationError, UserToken]]): Route =
+  private def handleResponse(response: Try[Either[AuthenticationError, Done]]): Route =
     response match {
       case Failure(exception) => complete(exception)
       case Success(success)   => handleResponse(success)
     }
 
-  private def handleResponse(response: Either[AuthenticationError, UserToken]): Route =
+  private def handleResponse(response: Either[AuthenticationError, Done]): Route =
     response match {
-      case Right(userToken) => complete(StatusCodes.OK -> userToken)
-      case Left(error)      => handleError(error)
+      case Right(_)    => complete(StatusCodes.OK)
+      case Left(error) => handleError(error)
     }
 
   private def handleError(error: AuthenticationError): Route =
