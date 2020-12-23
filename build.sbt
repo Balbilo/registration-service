@@ -1,6 +1,6 @@
 import scala.sys.process._
 
-ThisBuild / name := "registration-service"
+ThisBuild / name := "user-service"
 ThisBuild / version := "git rev-parse --short HEAD".!!.trim
 ThisBuild / scalaVersion := "2.13.3"
 
@@ -11,7 +11,7 @@ Test / testForkedParallel := true
 
 lazy val team = taskKey[Unit]("Team name")
 
-lazy val root = Project("registration-service", file("."))
+lazy val root = Project("user-service", file("."))
   .aggregate(projects: _*)
   .settings(Aliases.commonAliases)
   .settings(team := print("team"))

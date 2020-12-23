@@ -7,7 +7,7 @@ import org.mongodb.scala.{MongoClient, MongoClientSettings, MongoCredential}
 
 object MongoUtils {
 
-  def createSession(config: DatabaseConfig) = {
+  def createSession(config: DatabaseConfig): MongoClient = {
     val credentials: MongoCredential = createCredential(config.username, config.databaseName, config.password.toCharArray)
 
     val settings: MongoClientSettings = MongoClientSettings

@@ -28,11 +28,11 @@ final case class DatabaseConfig(
 )
 
 final case class AuthorizationConfig(
-    scheme: String,
-    host: String,
+    url: String,
     port: Int
 )
 
 final case class AuthenticationConfig(
-    hosts: String
+    url: String,
+    port: Int
 )

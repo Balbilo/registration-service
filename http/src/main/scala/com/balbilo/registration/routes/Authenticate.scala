@@ -23,7 +23,7 @@ final case class Authenticate(service: UserDetailsValidation, repository: Authen
   private implicit val ec = system.dispatcher
 
   val route =
-    (path("auth") & post & entity(as[UserDetails])) { userDetails =>
+    (path("register") & post & entity(as[UserDetails])) { userDetails =>
       val authenticate = (for {
         valid     <- EitherT(Future.successful(service.validateUserDetails(userDetails)))
         userToken <- EitherT(client.authorization.authorizeUser(valid))

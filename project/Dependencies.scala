@@ -16,13 +16,17 @@ object Dependencies {
     val akkaHttpCirce   = "1.35.2"
     val mongoDriver     = "4.1.1"
     val pureConfig      = "0.14.0"
+    val bcrypt          = "4.3.0"
   }
 
   private object Libraries {
 
-    object Config {
-      val pureConfig = "com.github.pureconfig" %% "pureconfig" % Versions.pureConfig
-      val all        = Seq(pureConfig)
+    object Utils {
+      val bcrypt          = "com.github.t3hnar"          %% "scala-bcrypt"    % Versions.bcrypt
+      val pureConfig      = "com.github.pureconfig"      %% "pureconfig"      % Versions.pureConfig
+      val logBack         = "ch.qos.logback"              % "logback-classic" % Versions.logBack
+      val typeSafeLogging = "com.typesafe.scala-logging" %% "scala-logging"   % Versions.typeSafeLogging
+      val all             = Seq(pureConfig, bcrypt, logBack, typeSafeLogging)
     }
 
     object Mongo {
@@ -61,20 +65,14 @@ object Dependencies {
       val all         = Seq(http, httpCirce, stream, sl4j, httpTestKit)
     }
 
-    object Logging {
-      val logBack         = "ch.qos.logback"              % "logback-classic" % Versions.logBack
-      val typeSafeLogging = "com.typesafe.scala-logging" %% "scala-logging"   % Versions.typeSafeLogging
-      val all             = Seq(logBack, typeSafeLogging)
-    }
   }
 
   lazy val http =
     libraryDependencies ++= Libraries.Cats.all ++
       Libraries.Akka.all ++
       Libraries.Circe.all ++
-      Libraries.Logging.all ++
       Libraries.ScalaTest.all ++
       Libraries.Mongo.all ++
-      Libraries.Config.all
+      Libraries.Utils.all
 
 }

@@ -15,6 +15,11 @@ object AuthenticationError {
     val code: String    = "invalidDetails"
     val message: String = s"[${invalidFields.toList.mkString(", ")}]"
   }
+
+  final case class UnknownError(error: String) extends AuthenticationError {
+    val code: String = "unexpectedError"
+    val message = s"Unexpected Error: ${error}"
+  }
 }
 
 sealed trait HttpError extends ServerError
