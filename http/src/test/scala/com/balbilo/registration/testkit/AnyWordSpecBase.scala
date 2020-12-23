@@ -1,6 +1,0 @@
-package com.balbilo.registration.testkit
-
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-
-class AnyWordSpecBase extends AnyWordSpec with Matchers
