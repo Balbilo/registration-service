@@ -1,5 +1,6 @@
 package com.balbilo.user.service
 
 final case class Services(
-    validation: UserDetailsValidation
+    validation: UserDetailsValidation,
+    encryption: Encryption
 )

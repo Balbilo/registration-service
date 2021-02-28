@@ -1,11 +1,10 @@
 package com.balbilo.user.service
 
 import java.time.LocalDate
-
 import cats.data.NonEmptyList
 import com.balbilo.user.config.UserDetailsConfig
 import com.balbilo.user.model.ValueClasses._
-import com.balbilo.user.model.{AuthenticationError, UserDetails, ValidationError}
+import com.balbilo.user.model.{AuthenticationError, RegistrationError, UserDetails, ValidationError}
 import com.balbilo.user.testkit.{AnyWordSpecBase, PropertySpecBase}
 
 import scala.util.matching.Regex
@@ -47,7 +46,7 @@ class UserDetailsValidationSpec extends AnyWordSpecBase with PropertySpecBase {
       val result          = validation.validateUserDetails(userDetails)
 
       result shouldBe Left(
-        AuthenticationError.InvalidDetailsError(
+        RegistrationError.InvalidDetailsError(
           NonEmptyList(ValidationError.InvalidEmail(invalidEmail), List(ValidationError.InvalidPassword(invalidPassword)))
         ))
     }

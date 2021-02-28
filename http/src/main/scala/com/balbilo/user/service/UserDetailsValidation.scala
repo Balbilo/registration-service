@@ -4,25 +4,25 @@ import cats.data.ValidatedNel
 import cats.implicits.{catsSyntaxTuple4Semigroupal, catsSyntaxValidatedId}
 import com.balbilo.user.config.UserDetailsConfig
 import com.balbilo.user.model.ValueClasses.{DateOfBirth, Email, FullName, Password}
-import com.balbilo.user.model.{AuthenticationError, UserDetails, ValidationError}
+import com.balbilo.user.model.{RegistrationError, UserDetails, ValidationError}
 import com.balbilo.user.service.UserDetailsValidation._
 
 import java.time.LocalDate
 import scala.util.matching.Regex
 
 trait UserDetailsValidation {
-  def validateUserDetails(userDetails: UserDetails): Either[AuthenticationError, UserDetails]
+  def validateUserDetails(userDetails: UserDetails): Either[RegistrationError, UserDetails]
 }
 
 final class UserDetailsValidationImpl(userDetailsConfig: UserDetailsConfig) extends UserDetailsValidation {
 
-  def validateUserDetails(userDetails: UserDetails): Either[AuthenticationError, UserDetails] =
+  def validateUserDetails(userDetails: UserDetails): Either[RegistrationError, UserDetails] =
     (
       validateFullName(userDetails.fullName, userDetailsConfig.fullNameRegex),
       validateEmail(userDetails.email, userDetailsConfig.emailRegex),
       validatePassword(userDetails.password, userDetailsConfig.passwordRegex),
       validateDateOfBirth(userDetails.dateOfBirth, userDetailsConfig.maxYears)
-    ).mapN(UserDetails).leftMap(AuthenticationError.InvalidDetailsError).toEither
+    ).mapN(UserDetails).leftMap(RegistrationError.InvalidDetailsError).toEither
 
 }
 

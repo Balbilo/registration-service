@@ -4,38 +4,48 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives.{as, complete, entity, onComplete, path, post}
 import akka.http.scaladsl.server.Route
-import com.balbilo.user.json.{serverErrorEncoder, userTokenDecoder, userTokenEncoder}
-import com.balbilo.user.model.RegisterError.UserRegistered
-import com.balbilo.user.model.{RegisterError, UserToken}
-import com.balbilo.user.repository.RegistrationRepository
+import com.balbilo.user.json._
+import com.balbilo.user.model.{RegistrationError, UserDetails, UserTokens}
+import com.balbilo.user.repository.Repositories
+import com.balbilo.user.service.Services
+import com.balbilo.user.utils.ExtensionMethods.EitherTOps
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 
+import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
-final case class Register(repository: RegistrationRepository)(implicit system: ActorSystem) {
+final case class Register(services: Services, repositories: Repositories)(implicit system: ActorSystem) {
 
-  private implicit val dispatcher = system.dispatcher
+  private implicit val ec = system.dispatcher
 
   val route =
-    (path("register") & post & entity(as[UserToken])) { userToken =>
-      val register = repository.registerUser(userToken)
-      onComplete(register)(handleResponse)
+    (path("register") & post & entity(as[UserDetails])) { userDetails =>
+      val registered = (for {
+        validDetails     <- Future.successful(services.validation.validateUserDetails(userDetails)).toEitherT
+        encryptedDetails <- services.encryption.encryptPassword(validDetails).toEitherT
+        userId           <- repositories.registrationRepository.registerUser(encryptedDetails).toEitherT
+        userToken        <- repositories.authorizationRepository.authorizeNonVerifiedUser(userId).toEitherT
+      } yield userToken).value
+
+      onComplete(registered) {
+        handleResponse
+      }
     }
 
-  private def handleResponse(register: Try[Either[RegisterError, UserToken]]): Route =
-    register match {
-      case Success(success)   => handleResponse(success)
+  private def handleResponse(response: Try[Either[RegistrationError, UserTokens]]): Route =
+    response match {
       case Failure(exception) => complete(exception)
+      case Success(success)   => handleResponse(success)
     }
 
-  private def handleResponse(register: Either[RegisterError, UserToken]): Route =
-    register match {
-      case Right(userToken) => complete(StatusCodes.OK -> userToken)
-      case Left(error)      => handlerError(error)
+  private def handleResponse(response: Either[RegistrationError, UserTokens]): Route =
+    response match {
+      case Right(userTokens) => complete(StatusCodes.OK -> userTokens)
+      case Left(error)       => handleError(error)
     }
 
-  private def handlerError(error: RegisterError): Route =
+  private def handleError(error: RegistrationError): Route =
     error match {
-      case UserRegistered => complete(StatusCodes.AlreadyReported -> UserRegistered)
+      case e: RegistrationError => complete(StatusCodes.BadRequest -> e)
     }
 }

@@ -1,0 +1,6 @@
+net.tls:
+    mode: requireTLS
+    certificateKeyFile: /etc/ss/mongodb.pem
+net:
+  bindIp: 0.0.0.0
+  port: 27017

@@ -5,7 +5,7 @@ import java.time.LocalDate
 import com.balbilo.user.model.HttpError._
 import com.balbilo.user.model.ValidationError._
 import com.balbilo.user.model.ValueClasses._
-import com.balbilo.user.model.{ServerError, UserDetails, UserToken, ValidationError}
+import com.balbilo.user.model.{ServerError, UserDetails, UserTokens, ValidationError}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalactic.anyvals.PosInt
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
@@ -26,7 +26,10 @@ trait PropertySpecBase extends ScalaCheckDrivenPropertyChecks {
     Gen.chooseNum(LocalDate.MIN.toEpochDay, LocalDate.MAX.toEpochDay).map(day => DateOfBirth(LocalDate.ofEpochDay(day)))
   )
 
-  implicit lazy val arbToken = Arbitrary(Gen.alphaNumStr.map(Token))
+
+  implicit lazy val arbAccessToken = Arbitrary(Gen.resultOf(AccessToken))
+
+  implicit lazy val arbRefreshToken = Arbitrary(Gen.resultOf(RefreshToken))
 
   implicit lazy val arbUserDetails = Arbitrary(Gen.resultOf(UserDetails))
 
@@ -59,5 +62,5 @@ trait PropertySpecBase extends ScalaCheckDrivenPropertyChecks {
     } yield serverError
   }
 
-  implicit lazy val arbUserToken: Arbitrary[UserToken] = Arbitrary(Gen.resultOf(UserToken))
+  implicit lazy val arbUserToken: Arbitrary[UserTokens] = Arbitrary(Gen.resultOf(UserTokens))
 }

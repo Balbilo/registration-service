@@ -1,33 +1,34 @@
 package com.balbilo.user
 
 import akka.actor.ActorSystem
-import com.balbilo.user.client.{AuthenticationImpl, AuthorizationImpl, Clients}
+import com.balbilo.user.clients.Mongo
 import com.balbilo.user.config.HttpConfig
-import com.balbilo.user.repository.{AuthenticationRepositoryMongo, RegistrationRepositoryMongo, Repositories}
-import com.balbilo.user.service.{Services, UserDetailsValidationImpl}
+import com.balbilo.user.repository.{AuthorizationRepositoryMongo, RegistrationRepositoryMongo, Repositories}
+import com.balbilo.user.service.{EncryptionImpl, Services, UserDetailsValidationImpl}
 import pureconfig.ConfigSource
+import pureconfig.generic.auto._
 
 object Main extends App {
 
   val config = ConfigSource.default.loadOrThrow[HttpConfig]
 
   implicit val system = ActorSystem("registration-service")
+  implicit val ec     = system.dispatcher
+
+  // Client
+  val mongoClient = new Mongo(config.database).mongoClient
 
   // Repositories
-  val authenticationRepository = new AuthenticationRepositoryMongo(config.database)
-  val registrationRepository   = new RegistrationRepositoryMongo(config.database)
+  val authenticationRepository = new AuthorizationRepositoryMongo(mongoClient, config.database)
+  val registrationRepository   = new RegistrationRepositoryMongo(mongoClient, config.database)
   val repositories             = Repositories(authenticationRepository, registrationRepository)
 
   //Services
   val validation = new UserDetailsValidationImpl(config.userDetails)
-  val services   = Services(validation)
+  val encryption = new EncryptionImpl()
+  val services   = Services(validation, encryption)
 
-  //Clients
-  val authorization  = new AuthorizationImpl(config.authorization)
-  val authentication = new AuthenticationImpl(config.authentication)
-  val clients        = Clients(authorization, authentication)
-
-  val server = new RegistrationServer(config.server, repositories, clients, services)
+  val server = new RegistrationServer(config.server, repositories, services)
 
   server.createServer()
 

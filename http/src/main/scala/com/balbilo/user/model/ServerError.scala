@@ -11,14 +11,9 @@ sealed trait AuthenticationError extends ServerError
 
 object AuthenticationError {
 
-  final case class InvalidDetailsError(invalidFields: NonEmptyList[ValidationError]) extends AuthenticationError {
-    val code: String    = "invalidDetails"
-    val message: String = s"[${invalidFields.toList.mkString(", ")}]"
-  }
-
   final case class UnknownError(error: String) extends AuthenticationError {
     val code: String = "unexpectedError"
-    val message = s"Unexpected Error: ${error}"
+    val message      = s"Unexpected Error: ${error}"
   }
 }
 
@@ -43,12 +38,23 @@ object HttpError {
   }
 }
 
-sealed trait RegisterError extends ServerError
+sealed trait RegistrationError extends ServerError
 
-object RegisterError {
+object RegistrationError {
 
-  case object UserRegistered extends RegisterError {
+  final case class InvalidDetailsError(invalidFields: NonEmptyList[ValidationError]) extends RegistrationError {
+    val code: String    = "invalidDetails"
+    val message: String = s"[${invalidFields.toList.mkString(", ")}]"
+  }
+
+  case object UserRegistered extends RegistrationError {
     val code: String    = "Registered"
     val message: String = "Registered: user already signed up"
+  }
+
+  case object PasswordEncryptionError extends RegistrationError {
+    val code: String    = "PasswordEncryptionError"
+    val message: String = "PasswordEncryptionError: user's password failed to encrypt"
+
   }
 }

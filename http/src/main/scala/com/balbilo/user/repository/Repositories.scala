@@ -1,6 +1,6 @@
 package com.balbilo.user.repository
 
 final case class Repositories(
-    authenticationRepository: AuthenticationRepository,
+    authorizationRepository: AuthorizationRepository,
     registrationRepository: RegistrationRepository
 )

@@ -4,19 +4,21 @@ import sbt._
 object Dependencies {
 
   private object Versions {
-    val catsCore        = "2.2.0"
-    val scalaTest       = "3.2.2"
-    val scalaCheck      = "1.14.3"
-    val scalaPlusCheck  = "3.1.0.0-RC2"
-    val circe           = "0.13.0"
-    val akkaHttp        = "10.2.1"
-    val akka            = "2.6.10"
-    val logBack         = "1.2.3"
-    val typeSafeLogging = "3.9.2"
-    val akkaHttpCirce   = "1.35.2"
-    val mongoDriver     = "4.1.1"
-    val pureConfig      = "0.14.0"
-    val bcrypt          = "4.3.0"
+    val catsCore            = "2.2.0"
+    val scalaTest           = "3.2.2"
+    val scalaCheck          = "1.14.3"
+    val scalaPlusCheck      = "3.1.0.0-RC2"
+    val circe               = "0.13.0"
+    val akkaHttp            = "10.2.1"
+    val akka                = "2.6.10"
+    val logBack             = "1.2.3"
+    val typeSafeLogging     = "3.9.2"
+    val akkaHttpCirce       = "1.35.2"
+    val mongoDriver         = "4.1.1"
+    val reactiveMongoDriver = "1.0.2"
+    val pureConfig          = "0.14.0"
+    val bcrypt              = "4.3.0"
+    val jwtCore             = "4.3.0"
   }
 
   private object Libraries {
@@ -26,12 +28,15 @@ object Dependencies {
       val pureConfig      = "com.github.pureconfig"      %% "pureconfig"      % Versions.pureConfig
       val logBack         = "ch.qos.logback"              % "logback-classic" % Versions.logBack
       val typeSafeLogging = "com.typesafe.scala-logging" %% "scala-logging"   % Versions.typeSafeLogging
-      val all             = Seq(pureConfig, bcrypt, logBack, typeSafeLogging)
+      val jwtCore         = "com.pauldijou"              %% "jwt-core"        % Versions.jwtCore
+
+      val all = Seq(pureConfig, bcrypt, logBack, typeSafeLogging, jwtCore)
     }
 
     object Mongo {
-      val mongoDriver = "org.mongodb.scala" %% "mongo-scala-driver" % Versions.mongoDriver
-      val all         = Seq(mongoDriver)
+      val mongoDriver         = "org.mongodb.scala" %% "mongo-scala-driver" % Versions.mongoDriver
+      val reactiveMongoDriver = "org.reactivemongo" %% "reactivemongo"      % Versions.reactiveMongoDriver
+      val all                 = Seq(mongoDriver, reactiveMongoDriver)
     }
 
     object Circe {

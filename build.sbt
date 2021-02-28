@@ -9,18 +9,17 @@ ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 Test / fork := true
 Test / testForkedParallel := true
 
-lazy val team = taskKey[Unit]("Team name")
-
 lazy val root = Project("user-service", file("."))
   .aggregate(projects: _*)
   .settings(Aliases.commonAliases)
-  .settings(team := print("team"))
 
 lazy val http = Projects
   .module("http")
   .enablePlugins(JavaAppPackaging, DockerPlugin)
   .settings(Dependencies.http)
   .settings(DockerSettings.settings)
+  .configs(IntegrationTest)
+  .settings(Defaults.itSettings)
 
 lazy val projects: Seq[ProjectReference] = Seq(
   http

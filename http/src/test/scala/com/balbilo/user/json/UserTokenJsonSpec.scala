@@ -1,6 +1,6 @@
 package com.balbilo.user.json
 
-import com.balbilo.user.model.UserToken
+import com.balbilo.user.model.UserTokens
 import com.balbilo.user.testkit.{AnyWordSpecBase, PropertySpecBase}
 import io.circe.parser.decode
 import io.circe.syntax._
@@ -11,16 +11,16 @@ class UserTokenJsonSpec extends AnyWordSpecBase with PropertySpecBase {
   "UserTokenJson" should {
 
     "encode and decode UserToken" in {
-      forAll { userToken: UserToken =>
-        val json = s"""{"token":"${userToken.token.value}","expireTimeStamp":${userToken.expireTimeStamp}}"""
-        decoder[UserToken](json) shouldBe Right(userToken)
+      forAll { userToken: UserTokens =>
+        val json = s"""{"accessToken":"${userToken.accessToken.value}","refreshToken":${userToken.refreshToken.value}}"""
+        decoder[UserTokens](json) shouldBe Right(userToken)
         encoder(userToken).noSpaces shouldBe json.trim
       }
     }
 
     "perform a roundTrip" in {
-      forAll { userToken: UserToken =>
-        decoder[UserToken](encoder(userToken).noSpaces) shouldBe Right(userToken)
+      forAll { userToken: UserTokens =>
+        decoder[UserTokens](encoder(userToken).noSpaces) shouldBe Right(userToken)
       }
     }
   }
